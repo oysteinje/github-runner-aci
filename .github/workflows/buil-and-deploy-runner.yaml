@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: runner
   IMAGE_TAG: ${{ github.run_number }}
   RUNNER_REPOSITORY_URL: https://github.com/oysteinje/github-runner-aci
-  RESOURCE_GROUP: rg-github-runner
+  RESOURCE_GROUP: rg-aci
   DNS_PREFIX: qbitsrunner
   LOCATION: westeurope
   ACR_SERVER: qbits.azurecr.io
@@ -39,32 +39,32 @@ jobs:
         run: |
           docker push ${{ env.ACR_SERVER }}/$IMAGE_NAME:$IMAGE_TAG
 
-      # # Login to Azure using Service Principal
-      # - name: Azure Login
-      #   uses: Azure/login@v1
-      #   with:
-      #     # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Login to Azure using Service Principal
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
 
-      # # Deploy an Azure Container Instance
-      # - name: Deploy to Azure Container Instances
-      #   uses: Azure/aci-deploy@v1
-      #   with:
-      #     # Name of the Resource Group in which the Container Instance will be created
-      #     resource-group: ${{ env.RESOURCE_GROUP }}
-      #     location: ${{ env.LOCATION }}
-      #     cpu: 2
-      #     dns-name-label: ${{ env.DNS_PREFIX }}${{ github.run_number }}
-      #     # List of environment variables for the container. Space-seperated in "key=value" format
-      #     environment-variables: RUNNER_REPOSITORY_URL=${{ env.RUNNER_REPOSITORY_URL }}
-      #     image: ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-      #     # Name of the Container Group Instance
-      #     name: actions-runner
-      #     registry-login-server: ${{ env.ACR_SERVER }}
-      #     # Username to log in Container Image Registry Server
-      #     registry-username: ${{ env.ACR_USER }}
-      #     # Password to log in Container Image Registry Server
-      #     registry-password: ${{ secrets.ACR_PASSWORD }}
-      #     # secure-environment-variables: # optional, default is 
-      #     #secure-environment-variables: GITHUB_TOKEN=${{ secrets.GIT_PAT }}
+      # Deploy an Azure Container Instance
+      - name: Deploy to Azure Container Instances
+        uses: Azure/aci-deploy@v1
+        with:
+          # Name of the Resource Group in which the Container Instance will be created
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          location: ${{ env.LOCATION }}
+          cpu: 2
+          dns-name-label: ${{ env.DNS_PREFIX }}${{ github.run_number }}
+          # List of environment variables for the container. Space-seperated in "key=value" format
+          environment-variables: RUNNER_REPOSITORY_URL=${{ env.RUNNER_REPOSITORY_URL }}
+          image: ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          # Name of the Container Group Instance
+          name: actions-runner
+          registry-login-server: ${{ env.ACR_SERVER }}
+          # Username to log in Container Image Registry Server
+          registry-username: ${{ env.ACR_USER }}
+          # Password to log in Container Image Registry Server
+          registry-password: ${{ secrets.ACR_PASSWORD }}
+          # secure-environment-variables: # optional, default is 
+          secure-environment-variables: GITHUB_TOKEN=${{ secrets.GIT_PAT }}
