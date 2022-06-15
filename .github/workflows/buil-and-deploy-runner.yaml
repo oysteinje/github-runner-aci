@@ -54,7 +54,7 @@ jobs:
           # Name of the Resource Group in which the Container Instance will be created
           resource-group: ${{ env.RESOURCE_GROUP }}
           location: ${{ env.LOCATION }}
-          cpu: 1
+          cpu: 2
           dns-name-label: ${{ env.DNS_PREFIX }}${{ github.run_number }}
           # List of environment variables for the container. Space-seperated in "key=value" format
           environment-variables: RUNNER_REPOSITORY_URL=${{ env.RUNNER_REPOSITORY_URL }}
@@ -76,7 +76,7 @@ jobs:
           # Name of the Resource Group in which the Container Instance will be created
           resource-group: ${{ env.RESOURCE_GROUP }}
           location: ${{ env.LOCATION }}
-          cpu: 1
+          cpu: 2
           dns-name-label: "${{ env.DNS_PREFIX }}${{ github.run_number }}tf"
           # List of environment variables for the container. Space-seperated in "key=value" format
           environment-variables: RUNNER_REPOSITORY_URL="https://github.com/oysteinje/tf-oystein-test"
